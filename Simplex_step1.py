@@ -88,7 +88,7 @@ def simplex_step(A,b,c,iB,iN,xB,Binv,irule):
         reduced_cost.append(c[j]-np.matmul(w,A[:,j]))#negative to be the entering variable
     if optimal(reduced_cost)==1:#get 1 if all reduced cost>=0
         istatus=-1
-        return istatus,iB,iN,xB
+        return istatus,iB,iN,xB,Binv
     if irule==1:
         k=negativereducedcost_bland(reduced_cost)
     if irule==0:
@@ -102,7 +102,7 @@ def simplex_step(A,b,c,iB,iN,xB,Binv,irule):
         judge=np.where(len(ratio[ratio>0])>0,min(ratio[ratio>0]),-1)
         if judge==-1:
             istatus=16
-            return istatus,iB,iN,xB
+            return istatus,iB,iN,xB,Binv
         else:
             r=np.where(ratio==judge)#r is a tuple, handle in the function pivot_bland/pivot_smallest_coefficient
             istatus=0
@@ -114,6 +114,6 @@ def simplex_step(A,b,c,iB,iN,xB,Binv,irule):
         iB_new,iN_new=pivot_smallest_coefficient(xB,r,k)
         Binv_new=update(B,k,r,y_k)
         xB_new=np.matmul(Binv_new,b)
-    return istatus,iB_new,iN_new,xB_new
+    return istatus,iB_new,iN_new,xB_new,Binv_new
 
 
